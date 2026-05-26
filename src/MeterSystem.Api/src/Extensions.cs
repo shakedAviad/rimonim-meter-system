@@ -1,7 +1,9 @@
-﻿using System.Text.Json;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using MeterSystem.Api.Endpoints;
 using MeterSystem.Api.Validation;
 using MeterSystem.Messaging.Extensions;
+using MeterSystem.Shared.Models;
 using Scalar.AspNetCore;
 namespace MeterSystem.Api.src;
 
@@ -45,7 +47,26 @@ public static class Extensions
         {
             services.AddRabbitMqMessaging(configuration);
             services.AddSingleton<IMeterReadingsRequestValidator, MeterReadingsRequestValidator>();
-            services.AddOpenApi();
+            services.AddOpenApi(options =>
+            {
+                options.AddSchemaTransformer((schema, context, cancellationToken) =>
+                {
+                    if (context.JsonTypeInfo.Type == typeof(MeterData))
+                    {
+                        schema.Example = new JsonObject
+                        {
+                            ["meter_number"] = 1111111,
+                            ["readings"] = new JsonObject
+                            {
+                                ["2026-04-25T11:30:00Z"] = 1000.17,
+                                ["2028-01-02T08:45:00Z"] = 1000.94
+                            }
+                        };
+                    }
+
+                    return Task.CompletedTask;
+                });
+            }); ;
 
             return services;
         }
