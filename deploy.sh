@@ -11,15 +11,19 @@ kubectl apply -f queue/deploy.yaml
 echo "Deploying Database..."
 kubectl apply -f database/deploy.yaml
 kubectl wait --for=condition=ready pod -l app=postgres --timeout=300s
-kubectl exec -i "$(kubectl get pod -l app=postgres -o jsonpath='{.items[0].metadata.name}')" --  sh -c 'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"' < database/schema.sql
+kubectl exec -i "$(kubectl get pod -l app=postgres -o jsonpath='{.items[0].metadata.name}')" -- sh -c 'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"' < database/schema.sql
 
 echo "Publishing and Deploying API..."
+kubectl delete deployment metersystem-api --ignore-not-found=true
 dotnet publish ./src/MeterSystem.Api/MeterSystem.Api.csproj -t:PublishContainer
+minikube image rm metersystem-api:latest || true
 minikube image load metersystem-api:latest
 kubectl apply -f ./src/MeterSystem.Api/deploy.yaml
 
-echo "Deploying Worker..."
+echo "Publishing and Deploying Worker..."
+kubectl delete deployment metersystem-worker --ignore-not-found=true
 dotnet publish ./src/MeterSystem.Worker/MeterSystem.Worker.csproj -t:PublishContainer
+minikube image rm metersystem-worker:latest || true
 minikube image load metersystem-worker:latest
 kubectl apply -f ./src/MeterSystem.Worker/deploy.yaml
 
