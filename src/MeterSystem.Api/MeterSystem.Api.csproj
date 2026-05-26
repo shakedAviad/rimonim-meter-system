@@ -7,11 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
+        <PackageReference Include="RabbitMQ.Client" Version="7.2.1" />
+        <PackageReference Include="Scalar.AspNetCore" Version="2.14.14" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\MeterSystem.Shared\MeterSystem.Shared.csproj" />
+      <ProjectReference Include="..\MeterSystem.Messaging\MeterSystem.Messaging.csproj" />
     </ItemGroup>
 
 </Project>
