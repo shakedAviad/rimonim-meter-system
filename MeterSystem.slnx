@@ -9,6 +9,8 @@
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/MeterSystem.Api/MeterSystem.Api.csproj" />
+    <Project Path="src/MeterSystem.Messaging/MeterSystem.Messaging.csproj" />
+    <Project Path="src/MeterSystem.Repositories/MeterSystem.Repositories.csproj" />
     <Project Path="src/MeterSystem.Shared/MeterSystem.Shared.csproj" />
     <Project Path="src/MeterSystem.Worker/MeterSystem.Worker.csproj" />
   </Folder>
