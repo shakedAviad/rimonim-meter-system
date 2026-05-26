@@ -1,4 +1,7 @@
-var builder = Host.CreateApplicationBuilder(args);
+using MeterSystem.Worker.src;
 
-var host = builder.Build();
-host.Run();
+await Host.CreateApplicationBuilder(args)
+    .ConfigureServices()
+    .BuildApplication()
+    .RunAsync();
+
